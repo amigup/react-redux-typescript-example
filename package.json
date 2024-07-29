@@ -26,8 +26,8 @@
     "typesafe-actions": "^4.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "now-build": "npm run build",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "test": "react-scripts test",

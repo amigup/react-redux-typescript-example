@@ -29,8 +29,6 @@ interface PropsFromDispatch {
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
 type AllProps = PropsFromState & PropsFromDispatch
 
-const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || 'https://api.opendota.com'
-
 class HeroesIndexPage extends React.Component<AllProps> {
   public componentDidMount() {
     const { fetchRequest: fr } = this.props
@@ -50,7 +48,10 @@ class HeroesIndexPage extends React.Component<AllProps> {
         {data.map(hero => (
           <tr key={hero.id}>
             <HeroDetail>
-              <HeroIcon src={API_ENDPOINT + hero.icon} alt={hero.name} />
+              <HeroIcon
+                src="https://steamusercontent-a.akamaihd.net/ugc/2314350571781870059/2B5C9FE9BA0A2DC303A13261444532AA08352843/"
+                alt={hero.name}
+              />
               <HeroName>
                 <Link to={`/heroes/${hero.name}`}>{hero.localized_name}</Link>
               </HeroName>

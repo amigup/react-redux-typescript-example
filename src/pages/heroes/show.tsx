@@ -23,6 +23,7 @@ import styled from '../../utils/styled'
 import LoadingOverlay from '../../components/data/LoadingOverlay'
 import LoadingOverlayInner from '../../components/data/LoadingOverlayInner'
 import LoadingSpinner from '../../components/data/LoadingSpinner'
+import { API_ENDPOINT } from '../../utils/endpoint'
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -46,8 +47,6 @@ interface State {
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
 type AllProps = PropsFromState & PropsFromDispatch & RouteComponentProps<RouteParams>
-
-const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || 'https://api.opendota.com'
 
 const Wrapper = styled('div')`
   position: relative;

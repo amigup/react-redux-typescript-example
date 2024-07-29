@@ -3,29 +3,86 @@ import Page from '../components/layout/Page'
 import Container from '../components/layout/Container'
 import styled from '../utils/styled'
 
+const serverCode = `
+namespace JwtValidation
+{
+    using Microsoft.IdentityModel.Tokens;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Text;
+
+    public static class NotSecureJwtTokenHandler
+    {
+        public static ClaimsPrincipal Parse(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                // Gettting error while validating token. So reading it and parsing.
+                // Is it enough for securit validation purpose?
+                // Hope so. Not a secuity expert.
+                // Do you know what should be done?
+                //var key = Encoding.UTF8.GetBytes(Constants.Secret);
+                //var validationParameters = new TokenValidationParameters
+                //{
+                //    ValidateIssuerSigningKey = true,
+                //    IssuerSigningKey = new SymmetricSecurityKey(key),
+                //    ValidateIssuer = false,
+                //    ValidateAudience = false
+                //};
+
+                // var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+                // return principal;
+
+                var jwtToken = tokenHandler.ReadJwtToken(token);
+                var uniqueName = jwtToken.Claims.FirstOrDefault(c => c.Type == "unique_name")?.Value;
+
+                return new ClaimsPrincipal(new ClaimsIdentity(new[] {
+                        new Claim(ClaimTypes.Name, uniqueName)
+                    }));
+            }
+            catch (Exception ex)
+            {
+                // Log exception if needed
+            }
+
+            return null;
+        }
+
+        public static string GenerateJwtToken(string subject)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.Secret));
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, subject) }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+    }
+}
+`
+
 function IndexPage() {
   return (
     <Page>
       <Container>
         <PageContent>
           <h1>Welcome!</h1>
-          <p>
-            Welcome to the Redux 4 + TypeScript 3.3 example! This example site shows you the ideal project structure, recommended libraries,
-            as well as design pattern on writing type-safe React + Redux app with TypeScript.
-          </p>
-          <p>
-            This project is intended as a supplement to{' '}
-            <a href="https://resir014.xyz/posts/2018/07/06/redux-4-plus-typescript/" target="blank" rel="noopener noreferrer">
-              this post
-            </a>
-            . To demonstrate it, I created a website which pulls data from the{' '}
-            <a href="https://docs.opendota.com" target="blank" rel="noopener noreferrer">
-              OpenDota API
-            </a>
-            , and display information like professional teams, heroes, as well as top players by hero. This will also demonstrate how to
-            structure your stores for each feature/module in a Redux-enabled app.
-          </p>
-          <p>Enjoy your stay!</p>
+          <p>Welcome to the another CTF challenge.</p>
+          <p>This project is intended as demostration of a simple CTF challenge for JWT validation.</p>
+          <h2>Challenge</h2>
+          <p>Can you access the team details? Go to Teams and select a team.</p>
+          <h3>Details</h3>
+          <p>At server below code demostrates how JWT is validated or parsed.</p>
+          <pre style={{ border: '1px black solid', width: '80vh' }}>
+            <code>{serverCode}</code>
+          </pre>
+          <h2>Are you having fun? :)</h2>
         </PageContent>
       </Container>
     </Page>

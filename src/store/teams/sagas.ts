@@ -2,8 +2,7 @@ import { all, call, fork, put, takeEvery, takeLatest } from 'redux-saga/effects'
 import { TeamsActionTypes } from './types'
 import { fetchError, fetchSuccess, selectTeam, teamSelected } from './actions'
 import { callApi } from '../../utils/api'
-
-const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || 'https://api.opendota.com'
+import { API_ENDPOINT } from '../../utils/endpoint'
 
 function* handleFetch() {
   try {
@@ -26,10 +25,10 @@ function* handleFetch() {
 
 function* handleSelect(action: ReturnType<typeof selectTeam>) {
   try {
-    const detail = yield call(callApi, 'get', API_ENDPOINT, `/teams/${action.payload}`)
-    const players = yield call(callApi, 'get', API_ENDPOINT, `/teams/${action.payload}/players`)
+    const detail = yield call(callApi, 'get', API_ENDPOINT, `/team/${action.payload}`)
+    const players = yield call(callApi, 'get', API_ENDPOINT, `/team/${action.payload}/players`)
 
-    if (detail.error || players.error) {
+    if (detail.error || players.error || detail == "Only Admin are allowed to access team detais") {
       yield put(fetchError(detail.error || players.error))
     } else {
       yield put(teamSelected({ detail, players }))

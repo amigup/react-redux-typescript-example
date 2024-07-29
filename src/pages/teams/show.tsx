@@ -59,7 +59,7 @@ class ShowTeamsPage extends React.Component<AllProps> {
   }
 
   public render() {
-    const { selected, loading } = this.props
+    const { selected, loading, errors } = this.props
 
     return (
       <Page>
@@ -72,6 +72,7 @@ class ShowTeamsPage extends React.Component<AllProps> {
                 </LoadingOverlayInner>
               </LoadingOverlay>
             )}
+            {errors && <h2>{errors}</h2>}
             {selected && (
               <>
                 {selected.detail && (
