@@ -1,8 +1,18 @@
+import { getToken } from "./token";
+
+let token: string | null = null;
+
 export async function callApi(method: string, url: string, path: string, data?: any) {
-  const res = await fetch(`${url}/api${path}`, {
+
+  if (!token) {
+    token = await getToken();
+  }
+
+  const res = await fetch(`${url}${path}`, {
     method,
     headers: {
-      Accept: 'application/json'
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data)
   })
