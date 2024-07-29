@@ -28,7 +28,7 @@ function* handleSelect(action: ReturnType<typeof selectTeam>) {
     const detail = yield call(callApi, 'get', API_ENDPOINT, `/team/${action.payload}`)
     const players = yield call(callApi, 'get', API_ENDPOINT, `/team/${action.payload}/players`)
 
-    if (detail.error || players.error || detail == "Only Admin are allowed to access team detais") {
+    if (detail.error || players.error) {
       yield put(fetchError(detail.error || players.error))
     } else {
       yield put(teamSelected({ detail, players }))
