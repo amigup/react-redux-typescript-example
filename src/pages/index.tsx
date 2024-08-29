@@ -19,7 +19,7 @@ namespace JwtValidation
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 // Gettting error while validating token. So reading it and parsing.
-                // Is it enough for securit validation purpose?
+                // Is it enough for security validation purpose?
                 // Hope so. Not a secuity expert.
                 // Do you know what should be done?
                 //var key = Encoding.UTF8.GetBytes(Constants.Secret);
